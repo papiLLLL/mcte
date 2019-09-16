@@ -12,7 +12,8 @@ class MultipleCSVToExcel:
         self.csv_path = os.path.dirname(os.path.abspath(__file__)) + "\\csv"
         self.template_file = "template.xlsx"
         self.new_file = "new_file.xlsx"
-        self.separate = "."     
+        self.separate = "."   
+
 
     def copy_worksheet(self, workbook, csv_files):
         worksheet = workbook.active
