@@ -38,12 +38,20 @@ class MultipleCSVToExcel:
             self.__paste_data(worksheet, csv_data)
 
     def __open_workbook(self) -> Workbook:
-        return load_workbook(self.TEMPLATE_PATH + "\\" + self.TEMPLATE_FILE)
+        try:
+            return load_workbook(self.TEMPLATE_PATH + "\\" + self.TEMPLATE_FILE)
+        except FileNotFoundError as err:
+            print(err)
+            sys.exit()
 
     def __get_csv_files(self) -> list:
-        csv_files = os.listdir(self.CSV_PATH)
-        if not csv_files:
-            print("ERROR: Nothing csv files in csv direcoty. please store csv file.")
+        try:
+            csv_files = os.listdir(self.CSV_PATH)
+            if not csv_files:
+                print("ERROR: Nothing csv files in csv direcoty. please store csv file.")
+                sys.exit()
+        except FileNotFoundError as err:
+            print(err)
             sys.exit()
         return csv_files
 
