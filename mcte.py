@@ -5,8 +5,8 @@ import sys
 import csv
 import textwrap
 import argparse
-from argparse import ArgumentParser
-from openpyxl import load_workbook
+from argparse import ArgumentParser, Namespace
+from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font, Border, Side
 
 class MultipleCSVToExcel:
@@ -16,15 +16,14 @@ class MultipleCSVToExcel:
     SIDE = Side(border_style = "thin", color = "000000")
     BORDER = Border(top = SIDE, bottom = SIDE, left = SIDE, right = SIDE)
 
-    def __init__(self, args):
+    def __init__(self, args: Namespace) -> None:
         self.DEST_ROW_INDEX = args.row
         self.DEST_COLUMN_INDEX = args.column
         self.DELIMITER = args.delimiter 
         self.FONT = Font(name = args.font, size = args.size)
         self.NEW_FILE = args.file
 
-
-    def __paste_data(self, worksheet, data):
+    def __paste_data(self, worksheet: Workbook, data: list) -> None:
         for row_index, row_value in enumerate(data):
             for column_index in range(len(row_value)):
                 cell = worksheet.cell(row = self.DEST_ROW_INDEX + row_index, \
@@ -33,26 +32,22 @@ class MultipleCSVToExcel:
                 cell.font = self.FONT
                 cell.border = self.BORDER
 
-
-    def __open_csv_file(self, worksheet, csv_file):
+    def __open_csv_file(self, worksheet: Workbook, csv_file: list) -> None:
         with open(self.CSV_PATH + "\\" + csv_file, "r") as f:
             csv_data = csv.reader(f, delimiter=",")
             self.__paste_data(worksheet, csv_data)
 
-
-    def __open_workbook(self):
+    def __open_workbook(self) -> Workbook:
         return load_workbook(self.TEMPLATE_PATH + "\\" + self.TEMPLATE_FILE)
 
-
-    def __get_csv_files(self):
+    def __get_csv_files(self) -> list:
         csv_files = os.listdir(self.CSV_PATH)
         if not csv_files:
             print("ERROR: Nothing csv files in csv direcoty. please store csv file.")
             sys.exit()
         return csv_files
 
-
-    def copy_csv_to_excel(self):
+    def copy_csv_to_excel(self) -> None:
         csv_files = self.__get_csv_files()
         wb = self.__open_workbook()
         ws = wb.active
@@ -63,7 +58,7 @@ class MultipleCSVToExcel:
         wb.save(self.NEW_FILE)
 
 
-def parser():
+def parser() -> Namespace:
     usage = textwrap.dedent('''\
             python {} [--help] [--file <new file name> ] [--row <number] [--column <number>]
                                   [--delimiter <delimiter>] [--font <font style>] [--size <font size> ]
@@ -95,7 +90,7 @@ def parser():
     return argparser.parse_args()
 
 
-def main():
+def main() -> None:
     args = parser()
     mcte = MultipleCSVToExcel(args)
     mcte.copy_csv_to_excel()
