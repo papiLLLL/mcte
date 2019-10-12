@@ -10,8 +10,8 @@ from openpyxl import Workbook, load_workbook
 from openpyxl.styles import Font, Border, Side
 
 class MultipleCSVToExcel:
-    TEMPLATE_PATH = os.path.dirname(os.path.abspath(__file__)) + "\\template"
-    CSV_PATH = os.path.dirname(os.path.abspath(__file__)) + "\\csv"
+    TEMPLATE_PATH = os.path.dirname(os.path.abspath(__file__)) + "/template"
+    CSV_PATH = os.path.dirname(os.path.abspath(__file__)) + "/csv"
     TEMPLATE_FILE = "template.xlsx"
     SIDE = Side(border_style = "thin", color = "000000")
     BORDER = Border(top = SIDE, bottom = SIDE, left = SIDE, right = SIDE)
@@ -33,13 +33,13 @@ class MultipleCSVToExcel:
                 cell.border = self.BORDER
 
     def __open_csv_file(self, worksheet: Workbook, csv_file: list) -> None:
-        with open(self.CSV_PATH + "\\" + csv_file, "r") as f:
+        with open(self.CSV_PATH + "/" + csv_file, "r") as f:
             csv_data = csv.reader(f, delimiter=",")
             self.__paste_data(worksheet, csv_data)
 
     def __open_workbook(self) -> Workbook:
         try:
-            return load_workbook(self.TEMPLATE_PATH + "\\" + self.TEMPLATE_FILE)
+            return load_workbook(self.TEMPLATE_PATH + "/" + self.TEMPLATE_FILE)
         except FileNotFoundError as err:
             print(err)
             sys.exit()
