@@ -60,10 +60,12 @@ class MultipleCSVToExcel:
         wb = self.__open_workbook()
         ws = wb.active
         for csv_file in csv_files:
+            print("Copy {0}...".format(csv_file))
             copy_ws = wb.copy_worksheet(ws)
             copy_ws.title = csv_file.split(self.DELIMITER, 1)[0]
             self.__open_csv_file(copy_ws, csv_file)
         wb.save(self.NEW_FILE)
+        print("Create {0}".format(self.NEW_FILE))
 
 
 def parser() -> Namespace:
